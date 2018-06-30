@@ -101,7 +101,53 @@ $(document).ready(function)(){
 
     function handleArticleDelete(){
         
+        var articleToDelete = $(this).parents(".panel").data();
+
+        $.ajax({
+            method: "DELETE",
+            url: "/api/headlines/" + articleToDelete._id
+        }).then(function(data){
+
+            if (data.ok){
+                initPage();
+            }
+        });
     }
 
+    function handleArticleNotes(){
 
+        var currentArticle = $(this).parents(".panel").data();
+
+        $.get("/api/notes") + currentArticle._id.then(function(data){
+            var modalText = [
+                "<div class='container-fluid text-center'>",
+                "<h4>Notes for article: ",
+                currentArticle._id,
+                "</h4>",
+                "<hr />",
+                "<ul class='list-group note container'>",
+                "</ul>",
+                "<textarea placeholder='New note' rows='4' cols='60'></textarea>",
+                "<button class='btn btn-success save'>Save Note</button>",
+                "</div>"
+            ].join("");
+
+            bootbox.dialog({
+                message: modalText,
+                closeButton true
+            });
+            var noteData = {
+                _id: currentArticle._id,
+                notes: data || []
+            };
+
+            $(".btn.save").data("article", noteData);
+
+            renderNotesList(noteData);
+        });
+    }
+
+    function handleNoteSave(){
+        
+    }
 }
