@@ -75,9 +75,33 @@ $(document).ready(function)(){
         if (!data.notes.length){
 
             currentNote = [
-                
-            ]
+                "<li class='list-group-item'>",
+                "No notes for this article yet.",
+                "</li>"
+            ].join("");
+            NotesToRender.push(currentNote);
         }
+        else{
+            for (var i = 0; i < data.notes.length; i++) {
+                currentNote = $([
+                    "<li class='list-group-item note'>",
+                    data.notes[i].noteText,
+                    "<button class='btn btn-danger note-delete'>x</button>",
+                    "</li>"
+                ]).join("");
+
+                currentNote.children("button").data("_id", data.notes[i]._id);
+
+                notesToRender.push(currentNote);
+            }
+        }
+
+        $(".note-container").append(notesToRender);
     }
+
+    function handleArticleDelete(){
+        
+    }
+
 
 }
